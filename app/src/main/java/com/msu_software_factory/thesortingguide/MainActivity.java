@@ -18,6 +18,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.widget.EditText;
+import android.text.InputType;
 
 
 public class MainActivity extends ActionBarActivity
@@ -146,8 +149,20 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+    public void enter(View view){
+        String result;
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Enter numbers");
+        alertDialog.setMessage("Enter any amount of numbers (the smaller the better), each number separated by commas.");
+        final EditText input = new EditText(this);
+//
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        alertDialog.setView(input);
+        alertDialog.show();
+        
+    }
 
-    public void sort(View view){
+    public void arrange(View view){
         Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
 
     }
