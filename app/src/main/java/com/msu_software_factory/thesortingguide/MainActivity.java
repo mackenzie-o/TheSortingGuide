@@ -1,6 +1,8 @@
 package com.msu_software_factory.thesortingguide;
 
+
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -151,31 +153,54 @@ public class MainActivity extends ActionBarActivity
     }
     public void enter(View view){
         String result;
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Enter numbers");
         alertDialog.setMessage("Enter any amount of numbers (the smaller the better), each number separated by commas.");
         final EditText input = new EditText(this);
-//
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(input);
+        alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                arrange(input.getText().toString());
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
         alertDialog.show();
         
     }
 
-    public void arrange(View view){
-        Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
-        int[] toSort = {47,83,2,9};
-
-            if (mTitle == "Bubble"){
-                Sorting.bubblesort(toSort);
-
+    public void arrange(String arrayString){
+        
+        //Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
+        int[] toSort = parseArray(arrayString);
+        if (mTitle == "Bubble"){
+            toSort = Sorting.bubblesort(toSort);
         }else if (mTitle == "Selection"){
-                Sorting.selectionsort(toSort);
-            }else if (mTitle == "Insertion"){
-                Sorting.insertionsort(toSort);
-            }
+            Sorting.selectionsort(toSort);
+        }else if (mTitle == "Insertion"){
+            Sorting.insertionsort(toSort);
+        }
         TextView resultBox = (TextView) findViewById(R.id.result_text);
-        resultBox.setText("potato");
+        resultBox.setText(Sorting.toString(toSort));
+    }
+    
+    public int[] parseArray(String in){
+        String[] bits = in.split(",");
+        int[] arr = new int[bits.length];
+        try {
+            for (int i = 0; i < bits.length; i++) {
+                String bit = bits[i].trim();
+                arr[i] = Integer.parseInt(bit);
+            }
+        }catch(Exception e){
+            return null;
+        }
+        return arr;
     }
 
 }

@@ -13,13 +13,14 @@ public class Sorting {
         }
         return newlist;
     }
-    public static void printlist(int[] list){
+    public static String toString(int[] list){
+        String out = "[ ";
         for (int i = 0; i < list.length; i++) {
-            System.out.print(list[i] + " ");
+            out += list[i] + " ";
         }
-        System.out.println();
+        return out + "]";
     }
-    public static void bubblesort(int[] unsorted){
+    public static int[] bubblesort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             for (int j = 0; j < unsorted.length -i; j++) {
                 if (unsorted[j] > unsorted[j+1]){
@@ -29,6 +30,7 @@ public class Sorting {
                 }
             }
         }
+        return unsorted;
     }
     public static void selectionsort(int[] unsorted){
         for (int i = 0; i < unsorted.length -2; i++) {
