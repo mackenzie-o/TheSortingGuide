@@ -164,7 +164,18 @@ public class MainActivity extends ActionBarActivity
 
     public void arrange(View view){
         Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
+        int[] toSort = {47,83,2,9};
 
+            if (mTitle == "Bubble"){
+                Sorting.bubblesort(toSort);
+
+        }else if (mTitle == "Selection"){
+                Sorting.selectionsort(toSort);
+            }else if (mTitle == "Insertion"){
+                Sorting.insertionsort(toSort);
+            }
+        TextView resultBox = (TextView) findViewById(R.id.result_text);
+        resultBox.setText("potato");
     }
 
 }

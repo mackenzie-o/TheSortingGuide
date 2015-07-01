@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Sorting {
     static Random randomgenerator = new Random();
-    
+
     public static int[] randlist(int size){
         int[] newlist = new int[size];
         for (int i = 0; i < newlist.length; i++) {
