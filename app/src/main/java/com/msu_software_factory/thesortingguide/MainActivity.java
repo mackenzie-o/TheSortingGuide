@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    // I think the Main page is supposed to start here, but I have 0 clue how to implement it. More Googling this weekend!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +52,8 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        setTitle("TEST");
     }
 
     @Override
@@ -62,6 +65,7 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+    // Selection Options
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
