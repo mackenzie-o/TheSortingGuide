@@ -3,6 +3,7 @@ package com.msu_software_factory.thesortingguide;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -209,6 +210,14 @@ public class MainActivity extends ActionBarActivity
             return null;
         }
         return arr;
+    }
+
+    public static class settingsPage extends ActionBarActivity{
+        @Override
+        public void onCreate(Bundle savedInstanceState){
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.fragment_settings_page);
+        }
     }
 
 }
