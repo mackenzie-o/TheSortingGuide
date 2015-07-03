@@ -178,12 +178,16 @@ public class MainActivity extends ActionBarActivity
         
         //Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
         int[] toSort = parseArray(arrayString);
-        if (mTitle == "Bubble"){
-            toSort = Sorting.bubblesort(toSort);
-        }else if (mTitle == "Selection"){
+        String currentPage = mTitle.toString();
+        
+        if (currentPage.equals("Bubble")){
+            Sorting.bubblesort(toSort);
+        }else if (currentPage.equals("Selection")){
             Sorting.selectionsort(toSort);
-        }else if (mTitle == "Insertion"){
+        }else if (currentPage.equals("Insertion")){
             Sorting.insertionsort(toSort);
+        } else {
+            System.out.println("No one is sorting....");
         }
         TextView resultBox = (TextView) findViewById(R.id.result_text);
         resultBox.setText(Sorting.toString(toSort));

@@ -20,7 +20,7 @@ public class Sorting {
         }
         return out + "]";
     }
-    public static int[] bubblesort(int[] unsorted){
+    public static void bubblesort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             for (int j = 0; j < unsorted.length -i; j++) {
                 if (unsorted[j] > unsorted[j+1]){
@@ -30,7 +30,6 @@ public class Sorting {
                 }
             }
         }
-        return unsorted;
     }
     public static void selectionsort(int[] unsorted){
         for (int i = 0; i < unsorted.length -2; i++) {
