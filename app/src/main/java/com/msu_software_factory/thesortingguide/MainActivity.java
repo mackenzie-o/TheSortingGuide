@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    // I think the Main page is supposed to start here, but I have 0 clue how to implement it. More Googling this weekend!
+    private Fragment about = new AboutFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +54,6 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        setTitle("TEST");
     }
 
     @Override
@@ -62,20 +61,31 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, getSelectedTab(position + 1))
                 .commit();
+    }
+    public Fragment getSelectedTab(int pos){
+        if(pos == 1){
+            return about;
+        }else{
+            return PlaceholderFragment.newInstance(pos);
+        }
+
     }
 
     // Selection Options
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+                mTitle = "About";
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                mTitle = getString(R.string.title_section1);
                 break;
             case 3:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 4:
                 mTitle = getString(R.string.title_section3);
                 break;
         }
@@ -160,7 +170,7 @@ public class MainActivity extends ActionBarActivity
         String result;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Enter numbers");
-        alertDialog.setMessage("Enter any amount of numbers (the smaller the better), each number separated by commas.");
+        alertDialog.setMessage("Enter any amount of numbers (the smaller the better) ranging between and including 0 and 99, each number separated by commas.");
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(input);
