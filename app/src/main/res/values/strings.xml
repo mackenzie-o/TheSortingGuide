@@ -13,6 +13,13 @@
 
     <string name="hello_world">Hello world!</string>
 
+    <string name="sort_prompt">Choose a sorting method:</string>
+    <string-array name="sort_choice">
+        <item>Bubble</item>
+        <item>Selection</item>
+        <item>Insertion</item>
+    </string-array>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

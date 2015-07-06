@@ -8,7 +8,7 @@ public class Sorting {
     public static int[] randlist(int size){
         int[] newlist = new int[size];
         for (int i = 0; i < newlist.length; i++) {
-            int randomInt = randomgenerator.nextInt(50);
+            int randomInt = randomgenerator.nextInt(10);
             newlist[i] = randomInt;
         }
         return newlist;
@@ -20,7 +20,7 @@ public class Sorting {
         }
         return out + "]";
     }
-    public static void bubblesort(int[] unsorted){
+    public static void bubbleSort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             for (int j = 0; j < unsorted.length -i; j++) {
                 if (unsorted[j] > unsorted[j+1]){
@@ -31,7 +31,7 @@ public class Sorting {
             }
         }
     }
-    public static void selectionsort(int[] unsorted){
+    public static void selectionSort(int[] unsorted){
         for (int i = 0; i < unsorted.length -2; i++) {
             int min = i;
             for (int j = i +1; j <= unsorted.length - 1; j++) {
@@ -46,7 +46,7 @@ public class Sorting {
             }
         }
     }
-    public static void insertionsort(int[] unsorted){
+    public static void insertionSort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             int temp = unsorted[i];
             int j;
