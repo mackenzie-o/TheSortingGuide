@@ -74,8 +74,10 @@ public class MainActivity extends ActionBarActivity
     public Fragment getSelectedTab(int pos) {
         if (pos == 1) {
             return about;
-        } else {
-            return PlaceholderFragment.newInstance(pos);
+        }else if (pos == 5) {
+            return new SettingsPage();
+        }else{
+                return PlaceholderFragment.newInstance(pos);
         }
 
     }
@@ -88,6 +90,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 2:
                 mTitle = "Sort";
+                break;
+            case 5:
+                mTitle = "Settings";
                 break;
         }
     }
@@ -181,7 +186,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void enter(View view) {
-        if(custom) {
+       /* if(custom) {*/
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Enter numbers");
             alertDialog.setMessage("Enter any amount of numbers (the smaller the better) ranging between and including 0 and 99, each number separated by commas.");
@@ -200,11 +205,10 @@ public class MainActivity extends ActionBarActivity
                 }
             });
             alertDialog.show();
-        }else{
+        /*}else{*/
 
         }
 
-    }
 
     public void arrange(String arrayString) {
         int[] toSort = parseArray(arrayString);
@@ -237,14 +241,20 @@ public class MainActivity extends ActionBarActivity
         return arr;
     }
 
-    public static class settingsPage extends ActionBarActivity {
+
+    public static class SettingsPage extends Fragment{
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.fragment_settings_page);
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_settings_page, container, false);
+        }
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((MainActivity) activity).onSectionAttached(5);
+
         }
     }
-
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
@@ -262,6 +272,9 @@ public class MainActivity extends ActionBarActivity
                     break;
             }*/
         public void onNothingSelected(AdapterView<?> parent) {}
+
+
+
     }
 }
 
