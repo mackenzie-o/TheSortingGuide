@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity
         }else if (pos == 5) {
             return new SettingsPage();
         }else{
-                return PlaceholderFragment.newInstance(pos);
+            return PlaceholderFragment.newInstance(pos);
         }
 
     }
@@ -186,46 +186,39 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void enter(View view) {
+        int[] toSort;
        /* if(custom) {*/
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle("Enter numbers");
-            alertDialog.setMessage("Enter any amount of numbers (the smaller the better) ranging between and including 0 and 99, each number separated by commas.");
-            final EditText input = new EditText(this);
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            alertDialog.setView(input);
-            alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    arrange(input.getText().toString());
-                    dialog.dismiss();
-                }
-            });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
-            alertDialog.show();
-        /*}else{*/
-
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Enter numbers");
+        alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
+        final EditText input = new EditText(this); //  INPUT VARIABLE
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        alertDialog.setView(input);
+        alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                System.out.println(input.getText().toString());
+                int[] toSort = parseArray(input.getText().toString());
+                System.out.println("HEYHEY " + Sorting.toString(toSort));
+                toSort = sort(toSort, method);
+                System.out.println("HEYHEY " + Sorting.toString(toSort));
+                TextView resultBox = (TextView) findViewById(R.id.result_text);
+                resultBox.setText(Sorting.toString(toSort));
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
+        /*}else{
+            int[] toSort = Sorting.randList();
         }
 
+        */
 
-    public void arrange(String arrayString) {
-        int[] toSort = parseArray(arrayString);
-        String currentPage = mTitle.toString();
-
-        if (currentPage.equals("Bubble")) {
-            Sorting.bubbleSort(toSort);
-        } else if (currentPage.equals("Selection")) {
-            Sorting.selectionSort(toSort);
-        } else if (currentPage.equals("Insertion")) {
-            Sorting.insertionSort(toSort);
-        } else {
-            System.out.println("No one is sorting....");
         }
-        TextView resultBox = (TextView) findViewById(R.id.result_text);
-        resultBox.setText(Sorting.toString(toSort));
-    }
 
     public int[] parseArray(String in) {
         String[] bits = in.split(",");
@@ -242,6 +235,24 @@ public class MainActivity extends ActionBarActivity
     }
 
 
+    public int[] /*void*/ sort(int[] theSort, int method){
+        System.out.println("000sort000 " + Sorting.toString(theSort));
+        int[] returnThis;
+        switch (method){
+            case 0:
+                returnThis = Sorting.bubbleSort(theSort);
+                break;
+            case 1:
+                returnThis = Sorting.selectionSort(theSort);
+                break;
+            default:
+                returnThis = Sorting.insertionSort(theSort);
+                break;
+        }
+        System.out.println("000sort000 " + Sorting.toString(returnThis));
+        return returnThis;
+    }
+
     public static class SettingsPage extends Fragment{
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -255,25 +266,13 @@ public class MainActivity extends ActionBarActivity
 
         }
     }
+
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
             System.out.println(method);
-        }/*
-            switch (method) {
-                case 0:
-                    Sorting.bubbleSort();
-                    break;
-                case 1:
-                    Sorting.selectionSort();
-                    break;
-                case 2:
-                    Sorting.insertionSort();
-                    break;
-            }*/
+        }
         public void onNothingSelected(AdapterView<?> parent) {}
-
-
 
     }
 }
