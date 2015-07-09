@@ -3,11 +3,13 @@ package com.msu_software_factory.thesortingguide;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,16 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.text.InputType;
-import android.widget.AdapterView.OnItemSelectedListener;
-import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -42,10 +40,8 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private static int method;
 
     private Fragment about = new AboutFragment();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,21 +57,30 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
     }
+    public static class PrefsFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.preferences);
+        }
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, getSelectedTab(position + 1))
+                .replace(R.id.container, replaceSelectedTab(position + 1))
                 .commit();
     }
-
-    public Fragment getSelectedTab(int pos) {
-        if (pos == 1) {
+    public Fragment replaceSelectedTab(int pos){
+        if(pos == 1){
             return about;
         }else if (pos == 5) {
-            return new SettingsPage();
+            return new PrefsFragment();
         }else{
             return PlaceholderFragment.newInstance(pos);
         }
@@ -89,7 +94,13 @@ public class MainActivity extends ActionBarActivity
                 mTitle = "About";
                 break;
             case 2:
-                mTitle = "Sort";
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_section3);
                 break;
             case 5:
                 mTitle = "Settings";
@@ -156,24 +167,12 @@ public class MainActivity extends ActionBarActivity
         }
 
         public PlaceholderFragment() {
-
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            // Sort Choice
-
-            Spinner spinner = (Spinner) rootView.findViewById(R.id.sortChoice);
-            // Create an ArrayAdapter using the string array and a default spinner layout
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
-                    R.array.sort_choice, android.R.layout.simple_spinner_item);
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
-            spinner.setAdapter(adapter);
-            spinner.setOnItemSelectedListener(new SortSpinner());
             return rootView;
         }
 
@@ -184,25 +183,17 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
-    public void enter(View view) {
-        int[] toSort;
-       /* if(custom) {*/
+    public void enter(View view){
+        String result;
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Enter numbers");
-        alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
-        final EditText input = new EditText(this); //  INPUT VARIABLE
+        alertDialog.setMessage("Enter any amount of numbers (the smaller the better) ranging between and including 0 and 99, each number separated by commas.");
+        final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(input);
         alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                System.out.println(input.getText().toString());
-                int[] toSort = parseArray(input.getText().toString());
-                System.out.println("HEYHEY " + Sorting.toString(toSort));
-                toSort = sort(toSort, method);
-                System.out.println("HEYHEY " + Sorting.toString(toSort));
-                TextView resultBox = (TextView) findViewById(R.id.result_text);
-                resultBox.setText(Sorting.toString(toSort));
+                arrange(input.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -212,15 +203,29 @@ public class MainActivity extends ActionBarActivity
             }
         });
         alertDialog.show();
-        /*}else{
-            int[] toSort = Sorting.randList();
+
+    }
+
+    public void arrange(String arrayString){
+
+        //Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
+        int[] toSort = parseArray(arrayString);
+        String currentPage = mTitle.toString();
+
+        if (currentPage.equals("Bubble")){
+            Sorting.bubbleSort(toSort);
+        }else if (currentPage.equals("Selection")){
+            Sorting.selectionSort(toSort);
+        }else if (currentPage.equals("Insertion")){
+            Sorting.insertionSort(toSort);
+        } else {
+            System.out.println("No one is sorting....");
         }
+        TextView resultBox = (TextView) findViewById(R.id.result_text);
+        resultBox.setText(Sorting.toString(toSort));
+    }
 
-        */
-
-        }
-
-    public int[] parseArray(String in) {
+    public int[] parseArray(String in){
         String[] bits = in.split(",");
         int[] arr = new int[bits.length];
         try {
@@ -228,53 +233,9 @@ public class MainActivity extends ActionBarActivity
                 String bit = bits[i].trim();
                 arr[i] = Integer.parseInt(bit);
             }
-        } catch (Exception e) {
+        }catch(Exception e){
             return null;
         }
         return arr;
     }
-
-
-    public int[] /*void*/ sort(int[] theSort, int method){
-        System.out.println("000sort000 " + Sorting.toString(theSort));
-        int[] returnThis;
-        switch (method){
-            case 0:
-                returnThis = Sorting.bubbleSort(theSort);
-                break;
-            case 1:
-                returnThis = Sorting.selectionSort(theSort);
-                break;
-            default:
-                returnThis = Sorting.insertionSort(theSort);
-                break;
-        }
-        System.out.println("000sort000 " + Sorting.toString(returnThis));
-        return returnThis;
-    }
-
-    public static class SettingsPage extends Fragment{
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_settings_page, container, false);
-        }
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(5);
-
-        }
-    }
-
-    public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            method = pos;
-            System.out.println(method);
-        }
-        public void onNothingSelected(AdapterView<?> parent) {}
-
-    }
 }
-
-
