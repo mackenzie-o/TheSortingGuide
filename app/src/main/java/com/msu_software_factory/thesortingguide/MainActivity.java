@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.text.InputType;
+import android.widget.AdapterView.OnItemSelectedListener;
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -170,6 +174,15 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            Spinner spinner = (Spinner) rootView.findViewById(R.id.sortChoice);
+                   // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                    R.array.sort_choice, android.R.layout.simple_spinner_item);
+                        // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new SortSpinner());
             return rootView;
         }
 
@@ -228,7 +241,6 @@ public class MainActivity extends ActionBarActivity
         return arr;
     }
 
-
     public int[] /*void*/ sort(int[] theSort, int method){
         System.out.println("000sort000 " + Sorting.toString(theSort));
         int[] returnThis;
@@ -247,20 +259,6 @@ public class MainActivity extends ActionBarActivity
         return returnThis;
     }
 
-    public static class SettingsPage extends Fragment{
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_settings_page, container, false);
-        }
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(5);
-
-        }
-    }
-
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
@@ -270,3 +268,4 @@ public class MainActivity extends ActionBarActivity
 
     }
 }
+
