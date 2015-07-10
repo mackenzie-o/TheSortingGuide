@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private static int method;
 
     private Fragment about = new AboutFragment();
     @Override
@@ -94,19 +96,14 @@ public class MainActivity extends ActionBarActivity
                 mTitle = "About";
                 break;
             case 2:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 4:
-                mTitle = getString(R.string.title_section3);
+                mTitle = "Sort";
                 break;
             case 5:
                 mTitle = "Settings";
                 break;
         }
     }
+
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -183,17 +180,24 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-    public void enter(View view){
-        String result;
+    public void enter(View view) {
+        int[] toSort;
+       /* if(custom) {*/
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Enter numbers");
-        alertDialog.setMessage("Enter any amount of numbers (the smaller the better) ranging between and including 0 and 99, each number separated by commas.");
-        final EditText input = new EditText(this);
+        alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
+        final EditText input = new EditText(this); //  INPUT VARIABLE
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(input);
         alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                arrange(input.getText().toString());
+                System.out.println(input.getText().toString());
+                int[] toSort = parseArray(input.getText().toString());
+                System.out.println("HEYHEY " + Sorting.toString(toSort));
+                toSort = sort(toSort, method);
+                System.out.println("HEYHEY " + Sorting.toString(toSort));
+                TextView resultBox = (TextView) findViewById(R.id.result_text);
+                resultBox.setText(Sorting.toString(toSort));
                 dialog.dismiss();
             }
         });
@@ -203,29 +207,14 @@ public class MainActivity extends ActionBarActivity
             }
         });
         alertDialog.show();
-
-    }
-
-    public void arrange(String arrayString){
-
-        //Toast.makeText(getApplicationContext(), "ILluminATI: " + mTitle, Toast.LENGTH_SHORT).show();
-        int[] toSort = parseArray(arrayString);
-        String currentPage = mTitle.toString();
-
-        if (currentPage.equals("Bubble")){
-            Sorting.bubbleSort(toSort);
-        }else if (currentPage.equals("Selection")){
-            Sorting.selectionSort(toSort);
-        }else if (currentPage.equals("Insertion")){
-            Sorting.insertionSort(toSort);
-        } else {
-            System.out.println("No one is sorting....");
+        /*}else{
+            int[] toSort = Sorting.randList();
         }
-        TextView resultBox = (TextView) findViewById(R.id.result_text);
-        resultBox.setText(Sorting.toString(toSort));
+        */
+
     }
 
-    public int[] parseArray(String in){
+    public int[] parseArray(String in) {
         String[] bits = in.split(",");
         int[] arr = new int[bits.length];
         try {
@@ -233,9 +222,51 @@ public class MainActivity extends ActionBarActivity
                 String bit = bits[i].trim();
                 arr[i] = Integer.parseInt(bit);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
         return arr;
+    }
+
+
+    public int[] /*void*/ sort(int[] theSort, int method){
+        System.out.println("000sort000 " + Sorting.toString(theSort));
+        int[] returnThis;
+        switch (method){
+            case 0:
+                returnThis = Sorting.bubbleSort(theSort);
+                break;
+            case 1:
+                returnThis = Sorting.selectionSort(theSort);
+                break;
+            default:
+                returnThis = Sorting.insertionSort(theSort);
+                break;
+        }
+        System.out.println("000sort000 " + Sorting.toString(returnThis));
+        return returnThis;
+    }
+
+    public static class SettingsPage extends Fragment{
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_settings_page, container, false);
+        }
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((MainActivity) activity).onSectionAttached(5);
+
+        }
+    }
+
+    public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            method = pos;
+            System.out.println(method);
+        }
+        public void onNothingSelected(AdapterView<?> parent) {}
+
     }
 }
