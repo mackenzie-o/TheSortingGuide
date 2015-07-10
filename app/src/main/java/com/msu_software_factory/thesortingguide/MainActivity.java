@@ -259,6 +259,20 @@ public class MainActivity extends ActionBarActivity
         return returnThis;
     }
 
+    public static class SettingsPage extends Fragment{
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_settings_page, container, false);
+        }
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((MainActivity) activity).onSectionAttached(5);
+
+        }
+    }
+
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
