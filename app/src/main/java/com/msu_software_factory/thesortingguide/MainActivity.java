@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.EditText;
 import android.text.InputType;
+import android.widget.AdapterView.OnItemSelectedListener;
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity
@@ -40,6 +44,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private static int method;
 
     private Fragment about = new AboutFragment();
     @Override
@@ -94,6 +99,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = "About";
                 break;
             case 2:
+                mTitle="Sort";
                 mTitle = getString(R.string.title_section1);
                 break;
             case 3:
@@ -173,6 +179,15 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            Spinner spinner = (Spinner) rootView.findViewById(R.id.sortChoice);
+                   // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                    R.array.sort_choice, android.R.layout.simple_spinner_item);
+                        // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        // Apply the adapter to the spinner
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(new SortSpinner());
             return rootView;
         }
 
@@ -237,5 +252,30 @@ public class MainActivity extends ActionBarActivity
             return null;
         }
         return arr;
+    }
+    public int[] /*void*/ sort(int[] theSort, int method){
+        System.out.println("000sort000 " + Sorting.toString(theSort));
+        int[] returnThis;
+        switch (method){
+            case 0:
+                returnThis = Sorting.bubbleSort(theSort);
+                break;
+            case 1:
+                returnThis = Sorting.selectionSort(theSort);
+                break;
+            default:
+                returnThis = Sorting.insertionSort(theSort);
+                break;
+        }
+        System.out.println("000sort000 " + Sorting.toString(returnThis));
+        return returnThis;
+    }
+
+    public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            method = pos;
+            System.out.println(method);
+        }
+        public void onNothingSelected(AdapterView<?> parent) {}
     }
 }
