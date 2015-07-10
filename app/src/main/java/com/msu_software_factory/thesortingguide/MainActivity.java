@@ -82,6 +82,7 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.container, replaceSelectedTab(position + 1))
                 .commit();
     }
+
     public Fragment replaceSelectedTab(int pos){
         if(pos == 1){
             return about;
@@ -90,7 +91,6 @@ public class MainActivity extends ActionBarActivity
         }else{
             return PlaceholderFragment.newInstance(pos);
         }
-
     }
 
     // Selection Options
@@ -108,14 +108,12 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,7 +139,6 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -206,9 +203,7 @@ public class MainActivity extends ActionBarActivity
             public void onClick(DialogInterface dialog, int id) {
                 System.out.println(input.getText().toString());
                 int[] toSort = parseArray(input.getText().toString());
-                System.out.println("HEYHEY " + Sorting.toString(toSort));
                 toSort = sort(toSort, method);
-                System.out.println("HEYHEY " + Sorting.toString(toSort));
                 TextView resultBox = (TextView) findViewById(R.id.result_text);
                 resultBox.setText(Sorting.toString(toSort));
                 dialog.dismiss();
@@ -241,8 +236,7 @@ public class MainActivity extends ActionBarActivity
         return arr;
     }
 
-    public int[] /*void*/ sort(int[] theSort, int method){
-        System.out.println("000sort000 " + Sorting.toString(theSort));
+    public int[] sort(int[] theSort, int method){
         int[] returnThis;
         switch (method){
             case 0:
@@ -255,7 +249,6 @@ public class MainActivity extends ActionBarActivity
                 returnThis = Sorting.insertionSort(theSort);
                 break;
         }
-        System.out.println("000sort000 " + Sorting.toString(returnThis));
         return returnThis;
     }
 
@@ -276,10 +269,8 @@ public class MainActivity extends ActionBarActivity
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
-            System.out.println(method);
         }
         public void onNothingSelected(AdapterView<?> parent) {}
-
     }
 }
 
