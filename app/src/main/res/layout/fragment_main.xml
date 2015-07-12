@@ -21,8 +21,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/sortChoice"
             android:layout_weight="1"
-            android:prompt="@+id/sort_prompt"
-            android:entries="@+id/sort_choice"
             />
     </LinearLayout>
 

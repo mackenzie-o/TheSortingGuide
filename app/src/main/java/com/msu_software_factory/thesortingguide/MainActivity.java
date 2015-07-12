@@ -72,6 +72,12 @@ public class MainActivity extends ActionBarActivity
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
         }
+        @Override
+        public void onAttach(Activity activity) {
+            super.onAttach(activity);
+            ((MainActivity) activity).onSectionAttached(3);
+
+        }
     }
 
     @Override
@@ -86,7 +92,7 @@ public class MainActivity extends ActionBarActivity
     public Fragment replaceSelectedTab(int pos){
         if(pos == 1){
             return about;
-        }else if (pos == 5) {
+        }else if (pos == 3) {
             return new PrefsFragment();
         }else{
             return PlaceholderFragment.newInstance(pos);
@@ -102,7 +108,7 @@ public class MainActivity extends ActionBarActivity
             case 2:
                 mTitle = "Sort";
                 break;
-            case 5:
+            case 3:
                 mTitle = "Settings";
                 break;
         }
@@ -257,12 +263,6 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_settings_page, container, false);
-        }
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(5);
-
         }
     }
 
