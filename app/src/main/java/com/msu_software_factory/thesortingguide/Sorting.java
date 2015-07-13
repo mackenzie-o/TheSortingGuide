@@ -38,7 +38,7 @@ public class Sorting {
 
     // SELECTION
     public static int[] selectionSort(int[] unsorted){
-        for (int i = 0; i < unsorted.length - 2; i++) {
+        for (int i = 0; i < unsorted.length; i++) {
             int min = i;
             for (int j = i +1; j <= unsorted.length - 1; j++) {
                 if (unsorted[j] < unsorted[min]){
