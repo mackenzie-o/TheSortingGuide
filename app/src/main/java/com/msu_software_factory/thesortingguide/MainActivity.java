@@ -194,9 +194,10 @@ public class MainActivity extends ActionBarActivity
         int[] toSort;
        /* if(custom) {*/
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Enter numbers");
-        alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
+        alertDialog.setTitle("Enter randomly assorted numbers");
+        alertDialog.setMessage("Enter any amount of randomly assorted numbers (the lesser the faster) ranging between and including 0 and 99, with each number separated by commas.");
         final EditText input = new EditText(this); //  INPUT VARIABLE
+        input.setHint("For example: 99, 2, 34, 56, 68");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         alertDialog.setView(input);
         alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {

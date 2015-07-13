@@ -13,13 +13,31 @@
     <string name="title_activity_main_screen">MainScreen</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="alertMessage"></string>
 
-    <string name="sort_prompt">Choose a sorting method:</string>
     <string-array name="sort_choice">
         <item>Bubble</item>
         <item>Selection</item>
         <item>Insertion</item>
     </string-array>
+
+    <string name="bubbleDesc">Think of this sorting method as a line of bubbles.
+        Each number is its own bubble, and the density of the bubble is the number.
+        This method goes through the list, comparing two adjacent numbers, or the difference between their densities.
+        If the selected number is larger than the next number, the numbers switch positions in the line.
+        The selected number will continue to move down the line until the next number is of equal or larger value, or it has reached the end of the list.
+        Once the method has reached the end of the list, it restarts at the beginning.
+        This continuation ensures the smaller numbers are at one end, and the larger numbers at the other.
+    </string>
+    <string name="selectionDesc">This sorting method looks through the entire list, looking for the smallest number.
+        When the method reaches the end of the list, the method switches the locations of the smallest number and the number at the beginning of the list.
+        The process continues for the rest of the list, shortening its search span, since the computer knows the beginning of the list has been sorted.
+    </string>
+    <string name="insertionDesc">In this sorting method, the selected number is \'inserted\' into the proper location in the sorted section of the list (if any).
+        The selected number looks through the numbers before it,
+        until it finds a location where the selected number is larger than the number before and smaller the number after.
+        The process then moves the numbers to the right of the position over one, so the selected number can \'insert\' itself into the sorted section.
+    </string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

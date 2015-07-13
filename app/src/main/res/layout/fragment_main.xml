@@ -9,13 +9,23 @@
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="1"
+        android:id="@+id/sort_prompt">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Choose a sorting method: "
+            android:id="@+id/sort_prompt" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:weightSum="1">
-
+        android:weightSum="1"
+        android:id="@+id/Sort_Spinner">
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,14 +33,16 @@
             android:layout_weight="1"
             android:prompt="@+id/sort_prompt"
             android:entries="@+id/sort_choice"
-            />
+            android:layout_gravity="center_vertical" />
+
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0.21"
         android:layout_gravity="center"
+        android:gravity="center|bottom"
         android:text="tap go to sort"
         android:id="@+id/result_text"
         android:textSize="@dimen/abc_text_size_display_2_material"/>
