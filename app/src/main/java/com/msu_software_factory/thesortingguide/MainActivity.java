@@ -3,8 +3,10 @@ package com.msu_software_factory.thesortingguide;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -61,6 +63,8 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 
     }
     public static class PrefsFragment extends PreferenceFragment {
@@ -198,34 +202,38 @@ public class MainActivity extends ActionBarActivity
     }
     public void enter(View view) {
         int[] toSort;
-       /* if(custom) {*/
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Enter numbers");
-        alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
-        final EditText input = new EditText(this); //  INPUT VARIABLE
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        alertDialog.setView(input);
-        alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                System.out.println(input.getText().toString());
-                int[] toSort = parseArray(input.getText().toString());
-                toSort = sort(toSort, method);
-                TextView resultBox = (TextView) findViewById(R.id.result_text);
-                resultBox.setText(Sorting.toString(toSort));
-                dialog.dismiss();
-            }
-        });
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
-        /*}else{
-            int[] toSort = Sorting.randList();
+        getPreferences(MODE_PRIVATE);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        System.out.println("!!!!!!!!! " + prefs.getBoolean("random_numbers", false));
+        if (prefs.getBoolean("random_numbers", false)){
+            toSort = Sorting.randList(10);
+            toSort = sort(toSort, method);
+            TextView resultBox = (TextView) findViewById(R.id.result_text);
+            resultBox.setText(Sorting.toString(toSort));
+        }else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Enter numbers");
+            alertDialog.setMessage("Enter any amount of numbers (the lesser the better) ranging between and including 0 and 99, with each number separated by commas.");
+            final EditText input = new EditText(this); //  INPUT VARIABLE
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            alertDialog.setView(input);
+            alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    System.out.println(input.getText().toString());
+                    int[] toSort = parseArray(input.getText().toString());
+                    toSort = sort(toSort, method);
+                    TextView resultBox = (TextView) findViewById(R.id.result_text);
+                    resultBox.setText(Sorting.toString(toSort));
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+            alertDialog.show();
         }
-        */
-
     }
 
     public int[] parseArray(String in) {
@@ -256,14 +264,6 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
         return returnThis;
-    }
-
-    public static class SettingsPage extends Fragment{
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_settings_page, container, false);
-        }
     }
 
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {
