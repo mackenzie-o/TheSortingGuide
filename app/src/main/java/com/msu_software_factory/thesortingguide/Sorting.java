@@ -13,6 +13,7 @@ public class Sorting {
         }
         return newlist;
     }
+
     public static String toString(int[] list){
         String out = "[ ";
         for (int i = 0; i < list.length; i++) {
@@ -20,6 +21,8 @@ public class Sorting {
         }
         return out + "]";
     }
+
+    // BUBBLE
     public static int[] bubbleSort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             for (int j = 0; j < unsorted.length -i; j++) {
@@ -32,8 +35,10 @@ public class Sorting {
         }
         return unsorted;
     }
-    public static int[]selectionSort(int[] unsorted){
-        for (int i = 0; i < unsorted.length -2; i++) {
+
+    // SELECTION
+    public static int[] selectionSort(int[] unsorted){
+        for (int i = 0; i < unsorted.length; i++) {
             int min = i;
             for (int j = i +1; j <= unsorted.length - 1; j++) {
                 if (unsorted[j] < unsorted[min]){
@@ -48,7 +53,9 @@ public class Sorting {
         }
         return unsorted;
     }
-    public static int[]insertionSort(int[] unsorted){
+
+    // INSERTION
+    public static int[] insertionSort(int[] unsorted){
         for (int i = 1; i < unsorted.length; i++) {
             int temp = unsorted[i];
             int j;
