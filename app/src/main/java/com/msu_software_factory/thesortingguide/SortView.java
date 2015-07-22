@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.lang.reflect.Constructor;
+
 /**
  * Created by James R. Jacobs on 7/19/2015.
  */
@@ -16,10 +18,23 @@ public class SortView extends ImageView {
     private Context mContext;
     Rect[] sortedUnits = new Rect[5];
     Paint paint = new Paint();
+    Class sortingClass;
+    static final Class<?>[] contSig = new Class[]{Context.class, AttributeSet.class};
+    Constructor<? extends Sorting> sortingCont;
+    Sorting sorter;
 
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
         mContext = context;
+        try {
+            sortingClass = mContext.getClassLoader().loadClass("Sorting.java");
+            sortingCont = sortingClass.getConstructor(contSig);
+            sorter = sortingCont.newInstance(new Object[]{context, attr});
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
         int x = 20;
         int y = 20;
         int top = 50;
@@ -40,5 +55,6 @@ public class SortView extends ImageView {
         for (Rect unit: sortedUnits){
             c.drawRect(unit, paint);
         }
+        findViewById(R.id.result_text);
     }
 }

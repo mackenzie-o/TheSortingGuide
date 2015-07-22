@@ -203,9 +203,14 @@ public class MainActivity extends ActionBarActivity
     public void enter(View view) {
         int[] toSort;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        System.out.println("!!!!!!!!! " + prefs.getBoolean("random_numbers", false));
         if (prefs.getBoolean("random_numbers", false)){
             toSort = Sorting.randList(10);
+
+            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = vi.inflate(R.layout.sort_view, null);
+            ViewGroup insertPoint = (ViewGroup)findViewById(R.id.sort_space);
+            insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
             toSort = sort(toSort, method);
             TextView resultBox = (TextView) findViewById(R.id.result_text);
             resultBox.setText(Sorting.toString(toSort));
