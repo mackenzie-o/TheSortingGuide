@@ -4,11 +4,12 @@ import java.util.Random;
 
 public class Sorting {
     static Random randomgenerator = new Random();
+    static int sortSize = 7;
 
     public static int[] randList(int size){
-        int[] newlist = new int[10];
+        int[] newlist = new int[sortSize];
         for (int i = 0; i < newlist.length; i++) {
-            int randomInt = randomgenerator.nextInt(10);
+            int randomInt = randomgenerator.nextInt(sortSize);
             newlist[i] = randomInt;
         }
         return newlist;
