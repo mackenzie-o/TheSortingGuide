@@ -26,21 +26,22 @@ public class SortView extends ImageView {
     private Context mContext;
     int rHeight, rWidth = 0;
     Rect[] sortedUnits;
-    int[] toSort;
+    static int[] toSort;
     Paint paint = new Paint();
     Boolean firstDraw = true;
-    static MainActivity activity;
     int textSize = 10;
 
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
         mContext = context;
         try{
-            this.toSort = activity.toSort;
             sortedUnits = new Rect[toSort.length];
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+    public static void setToSort(int[] array){
+        toSort = array;
     }
 
     @Override
@@ -56,9 +57,6 @@ public class SortView extends ImageView {
 
             drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(toSort[i]));
         }
-    }
-    public static void setActivity(MainActivity act){
-        activity = act;
     }
     private void viewSetUp(){
         int slotSize = this.getWidth() / toSort.length;
