@@ -204,6 +204,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
     public void enter(View view) {
+//        retrieves the shared preferences for the randomizer, which is true or false
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (prefs.getBoolean("random_numbers", false)){
             this.toSort = Sorting.randList(10);
@@ -211,7 +212,7 @@ public class MainActivity extends ActionBarActivity
             toSort = sort(toSort, method);
             this.resultbox = resultBox;
             resultBox.setText(Sorting.toString(toSort));
-            SortView.setToSort(toSort);
+            SortView.setToSort(Sorting.sortSteps.steps);
 
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = vi.inflate(R.layout.sort_view, null);
@@ -236,7 +237,8 @@ public class MainActivity extends ActionBarActivity
                     resultBox.setText(Sorting.toString(toSort));
                     dialog.dismiss();
 
-                    SortView.setToSort(toSort);
+//                    Passes the sorting list to a static variable
+                    SortView.setToSort(Sorting.sortSteps.steps);
 
                     LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View v = vi.inflate(R.layout.sort_view, null);
