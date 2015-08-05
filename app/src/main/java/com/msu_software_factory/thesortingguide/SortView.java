@@ -17,6 +17,7 @@ import org.w3c.dom.Text;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,21 +27,25 @@ public class SortView extends ImageView {
     private Context mContext;
     int rHeight, rWidth = 0;
     Rect[] sortedUnits;
-    int[] toSort;
+    static LinkedList<Step> toSort;
+    static int[] unsorted;
     Paint paint = new Paint();
     Boolean firstDraw = true;
-    static MainActivity activity;
     int textSize = 10;
 
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
         mContext = context;
         try{
-            this.toSort = activity.toSort;
-            sortedUnits = new Rect[toSort.length];
+            sortedUnits = new Rect[unsorted.length];
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+    public static void setToSort(LinkedList<Step> list){
+        toSort = list;
+        unsorted = list.getFirst().arrayBefore;
+        System.out.println("printhere " + unsorted);
     }
 
     @Override
@@ -54,18 +59,16 @@ public class SortView extends ImageView {
             float txPos = sortedUnits[i].exactCenterX();
             float tyPos = sortedUnits[i].exactCenterY();
 
-            drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(toSort[i]));
+            drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(unsorted[i]));
         }
     }
-    public static void setActivity(MainActivity act){
-        activity = act;
-    }
     private void viewSetUp(){
-        int slotSize = this.getWidth() / toSort.length;
+        int slotSize = this.getWidth() / unsorted.length;
         int xPos = 10;
         int yPos = this.getHeight() / 2;
         rWidth = slotSize - 20;
         rHeight = rWidth;
+//        sets the size of boxes according to the length of array
         for (int i = 0; i < sortedUnits.length; i++){
             sortedUnits[i] = new Rect(xPos,yPos,xPos + rWidth - 1,yPos + rHeight - 1);
             xPos += rWidth + 20;
@@ -89,6 +92,7 @@ public class SortView extends ImageView {
         String mText = "10";
         int start = 0;
         int end = mText.length();
+//        adjusts the text size to fit in the box
         while (start < end) {
             int len = paint.breakText(mText, start, end, true, rWidth,
                     null);

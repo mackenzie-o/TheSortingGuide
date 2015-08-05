@@ -103,6 +103,7 @@ public class Sorting {
                 unsorted[j] = unsorted[j-1];
                 unsorted[j-1] = temp;
                 step.arrayAfter = unsorted.clone();
+                sortSteps.addStep(step);
             }
         }
         return unsorted;
