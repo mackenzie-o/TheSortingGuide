@@ -34,12 +34,20 @@ public class Sorting {
                 if (unsorted[j] > unsorted[j+1]){
                     step = new Step();
                     step.arrayBefore = unsorted.clone();
+                    step.type = "swap";
                     step.start = j;
                     step.end = j+1;
                     int temp = unsorted[j];
                     unsorted[j] = unsorted[j+1];
                     unsorted[j+1] = temp;
                     step.arrayAfter = unsorted.clone();
+                    sortSteps.addStep(step);
+                } else {
+                    step = new Step();
+                    step.arrayBefore = step.arrayAfter = unsorted.clone();
+                    step.type = "compare";
+                    step.start = j;
+                    step.end = j+1;
                     sortSteps.addStep(step);
                 }
             }
@@ -57,10 +65,17 @@ public class Sorting {
                 if (unsorted[j] < unsorted[min]){
                     min = j;
                 }
+                step = new Step();
+                step.arrayBefore = step.arrayAfter = unsorted.clone();
+                step.type = "compare";
+                step.start = j;
+                step.end = min;
+                sortSteps.addStep(step);
             }
             if (min != i){
                 step = new Step();
                 step.arrayBefore = unsorted.clone();
+                step.type = "swap";
                 step.start = min;
                 step.end = i;
                 int temp = unsorted[min];
@@ -81,6 +96,7 @@ public class Sorting {
             for(int j = i; j > 0 && unsorted[j] < unsorted[j-1]; j--) {
                 step = new Step();
                 step.arrayBefore = unsorted.clone();
+                step.type = "swap";
                 step.start = j;
                 step.end = j-1;
                 int temp = unsorted[j];
@@ -121,12 +137,15 @@ class Step {
     int start;
     int end;
 
+    String type;
+
     public Step() {}
 
     public String toString() {
         String out = "Step:";
         out += "\n\t " + Sorting.toString(arrayBefore);
         out += "\n\t " + Sorting.toString(arrayAfter);
+        out += "\n\t " + type;
         out += "\n\t Start: " + start;
         out += "\n\t End:   " + end;
 
