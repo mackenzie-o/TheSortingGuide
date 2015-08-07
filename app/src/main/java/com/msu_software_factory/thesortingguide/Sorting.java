@@ -6,7 +6,7 @@ import java.util.Random;
 public class Sorting {
     static Random randomgenerator = new Random();
     static SortSteps sortSteps;
-    static int sortSize = 7;
+    static int sortSize = 6;
 
     public static int[] randList(int size){
         int[] newlist = new int[sortSize];

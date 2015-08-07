@@ -231,20 +231,35 @@ public class MainActivity extends ActionBarActivity
             alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     System.out.println(input.getText().toString());
-                    int[] toSort = parseArray(input.getText().toString());
-                    toSort = sort(toSort, method);
-                    TextView resultBox = (TextView) findViewById(R.id.result_text);
-                    resultBox.setText(Sorting.toString(toSort));
-                    dialog.dismiss();
+                    String temp = input.getText().toString();
+                    int[] toSort;
+                    if (input != null) {
+                        toSort = parseArray(input.getText().toString());
+                    } else {
+                        toSort = new int[0];
+                    }
+                    if ( toSort != null && toSort.length == 6) {
+                        toSort = sort(toSort, method);
+                        TextView resultBox = (TextView) findViewById(R.id.result_text);
+                        resultBox.setText(Sorting.toString(toSort));
+                        dialog.dismiss();
 
 //                    Passes the sorting list to a static variable
-                    SortView.setToSort(Sorting.sortSteps.steps);
+                        SortView.setToSort(Sorting.sortSteps.steps);
 
-                    LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View v = vi.inflate(R.layout.sort_view, null);
-                    ViewGroup insertPoint = (ViewGroup)findViewById(R.id.sort_space);
-                    insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View v = vi.inflate(R.layout.sort_view, null);
+                        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.sort_space);
+                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else {
+                        Context context = getApplicationContext();
+                        CharSequence text = "The number of the inputs shall be 6, and only 6. 5 will not cut it, unless you then proceed to input another number, making 6";
+                        int duration = Toast.LENGTH_LONG;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
+
             });
             alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {

@@ -61,6 +61,14 @@ public class SortView extends ImageView {
 
             drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(unsorted[i]));
         }
+   for (int i = 0; i < toSort.size(); i++){
+       Step step = toSort.get(i);
+       int[] before = step.arrayBefore;
+       int[] after = step.arrayAfter;
+       if(before == after) {
+           paint.setColor(Color.GREEN);
+       } else {paint.setColor(Color.RED);}
+   }
     }
     private void viewSetUp(){
         int slotSize = this.getWidth() / unsorted.length;
