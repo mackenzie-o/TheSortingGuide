@@ -4,6 +4,8 @@ package com.msu_software_factory.thesortingguide;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
+import android.os.SystemClock;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -33,6 +35,7 @@ import android.widget.EditText;
 import android.text.InputType;
 import android.widget.AdapterView.OnItemSelectedListener;
 import java.util.ArrayList;
+import android.os.Handler;
 
 
 public class MainActivity extends ActionBarActivity
@@ -215,10 +218,13 @@ public class MainActivity extends ActionBarActivity
             SortView.setToSort(Sorting.sortSteps.steps);
 
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View v = vi.inflate(R.layout.sort_view, null);
+            View sort_view = vi.inflate(R.layout.sort_view, null);
             ViewGroup insertPoint = (ViewGroup)findViewById(R.id.sort_space);
-            insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            insertPoint.addView(sort_view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+
+
+            AnimateControl(sort_view);
 
         }else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -298,6 +304,57 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
         return returnThis;
+    }
+
+    public void AnimateControl(View sort_view) {
+
+        //Runnable mRunnable = () -> AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+
+        //Runnable mRunnable = new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+        //    }
+        //};
+
+        //runOnUiThread(mRunnable);
+
+        AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+    }
+
+    public void AnimateMove(View sort_view, Rect[] rex, int start, int end){
+
+        // move square upwards
+        for (int i = 0; i < SortView.rHeight + 20; i++){
+            rex[start].offset(0, -1);
+            sort_view.postInvalidate();
+        }
+
+        // move square horizontally above its correct spot
+        for (int i = rex[start].left; i < rex[end].left; i++){
+            rex[start].offset(1, 0);
+            sort_view.postInvalidate();
+        }
+
+        // shift all other units over
+        for (int i = 0; i < SortView.rWidth + 20; i++){
+            for (int j = start + 1; j <= end; j++){
+                rex[j].offset(-1, 0);
+            }
+            sort_view.postInvalidate();
+        }
+
+        // move square back into line
+        for (int i = 0; i < SortView.rHeight + 20; i++){
+            rex[start].offset(0, 1);
+            sort_view.postInvalidate();
+        }
+
+        //swap start and end rects in array
+        Rect temp = rex[start];
+        rex[start] = rex[end];
+        rex[end] = temp;
+
     }
 
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {

@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,8 +26,8 @@ import java.util.List;
  */
 public class SortView extends ImageView {
     private Context mContext;
-    int rHeight, rWidth = 0;
-    Rect[] sortedUnits;
+    static int rHeight, rWidth = 0;
+    static Rect[] sortedUnits;
     static LinkedList<Step> toSort;
     static int[] unsorted;
     Paint paint = new Paint();
@@ -36,24 +37,28 @@ public class SortView extends ImageView {
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
         mContext = context;
+        System.out.println("Sort View constructor called");
         try{
             sortedUnits = new Rect[unsorted.length];
         }catch (Exception e){
             System.out.println(e);
         }
+
+        viewSetUp();
     }
+
+
     public static void setToSort(LinkedList<Step> list){
         toSort = list;
         unsorted = list.getFirst().arrayBefore;
-        System.out.println("printhere " + unsorted);
     }
 
     @Override
     protected void onDraw(Canvas c){
-        if (firstDraw){
-            viewSetUp();
-            firstDraw = false;
-        }
+        //if (firstDraw){
+        //    viewSetUp();
+         //   firstDraw = false;
+        //}
         for (int i = 0; i < sortedUnits.length; i++){
             c.drawRect(sortedUnits[i], paint);
             float txPos = sortedUnits[i].exactCenterX();
@@ -61,14 +66,7 @@ public class SortView extends ImageView {
 
             drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(unsorted[i]));
         }
-   for (int i = 0; i < toSort.size(); i++){
-       Step step = toSort.get(i);
-       int[] before = step.arrayBefore;
-       int[] after = step.arrayAfter;
-       if(before == after) {
-           paint.setColor(Color.GREEN);
-       } else {paint.setColor(Color.RED);}
-   }
+
     }
     private void viewSetUp(){
         int slotSize = this.getWidth() / unsorted.length;
@@ -84,7 +82,6 @@ public class SortView extends ImageView {
         paint.setColor(Color.BLUE);
         textSize = setSuitableTextSize();
         paint.setTextAlign(Paint.Align.CENTER);
-        invalidate();
     }
     private int setSuitableTextSize() {
         int textSize = getEstimateTextSize();
@@ -102,8 +99,7 @@ public class SortView extends ImageView {
         int end = mText.length();
 //        adjusts the text size to fit in the box
         while (start < end) {
-            int len = paint.breakText(mText, start, end, true, rWidth,
-                    null);
+            int len = paint.breakText(mText, start, end, true, rWidth, null);
             start += len;
             mTextBreakPoints.add(start);
         }
@@ -126,5 +122,40 @@ public class SortView extends ImageView {
         //cY+(textSize/2) =  The y-coordinate of the origin of the text being drawn
 
         canvas.drawText(text, cX - (textWidth / 2), cY + (textSize / 2), tempTextPaint);
+    }
+
+    private void animationTest(Rect[] rex, int start, int end) {
+
+        // move square upwards
+        for (int i = 0; i < rHeight + 20; i++){
+            rex[start].offset(0, -1);
+            postInvalidate();
+        }
+
+        // move square horizontally above its correct spot
+        for (int i = rex[start].left; i < rex[end].left; i++){
+            rex[start].offset(1, 0);
+            postInvalidate();
+        }
+
+        // shift all other units over
+        for (int i = 0; i < rWidth + 20; i++){
+            for (int j = start + 1; j <= end; j++){
+                   rex[j].offset(-1, 0);
+            }
+            postInvalidate();
+        }
+
+        // move square back into line
+        for (int i = 0; i < rHeight + 20; i++){
+            rex[start].offset(0, 1);
+            postInvalidate();
+        }
+
+        //swap start and end rects in array
+        Rect temp = rex[start];
+        rex[start] = rex[end];
+        rex[end] = temp;
+
     }
 }
