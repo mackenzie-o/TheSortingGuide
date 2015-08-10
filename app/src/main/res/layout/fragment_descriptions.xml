@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.msu_software_factory.thesortingguide.descriptions">
+
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/descSpinner"
+        android:layout_gravity="center_horizontal|top"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Description"
+        android:id="@+id/descTitle"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:paddingRight="8dp"
+        android:paddingLeft="16dp"
+        android:layout_height="wrap_content"
+        android:text="@string/bubbleDesc"
+        android:id="@+id/descView"
+        android:layout_gravity="center|top" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Pseudo Code"
+        android:id="@+id/codeTitle"
+        android:paddingLeft="8dp"
+        android:paddingTop="4dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:paddingRight="8dp"
+        android:paddingLeft="16dp"
+        android:layout_height="wrap_content"
+        android:text="sfbjl"
+        android:id="@+id/codeView" />
+
+
+</LinearLayout>

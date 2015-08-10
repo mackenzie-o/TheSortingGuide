@@ -5,24 +5,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity$PlaceholderFragment"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a sorting method: "
+        android:id="@+id/sort_prompt" />
 
     <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:weightSum="1"
-        android:id="@+id/sort_prompt_holder">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose a sorting method: "
-            android:id="@+id/sort_prompt" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,20 +28,31 @@
             android:layout_height="wrap_content"
             android:id="@+id/sortChoice"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            />
 
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Be sure to look at the Description tab for descriptions of the different sorting methods."
+        android:layout_marginTop="10dp"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.21"
-        android:layout_gravity="center"
         android:gravity="center|bottom"
         android:text="tap go to sort"
         android:id="@+id/result_text"
-        android:textSize="@dimen/abc_text_size_display_2_material"/>
+        android:textSize="@dimen/abc_text_size_display_2_material"
+        android:layout_weight="0.88" />
 
     <Button
         android:layout_width="wrap_content"

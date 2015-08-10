@@ -4,6 +4,7 @@ package com.msu_software_factory.thesortingguide;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -11,7 +12,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -26,6 +30,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
@@ -33,6 +38,8 @@ import android.widget.EditText;
 import android.text.InputType;
 import android.widget.AdapterView.OnItemSelectedListener;
 import java.util.ArrayList;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 
 public class MainActivity extends ActionBarActivity
@@ -50,6 +57,7 @@ public class MainActivity extends ActionBarActivity
     private static int method;
 
     private Fragment about = new AboutFragment();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +74,9 @@ public class MainActivity extends ActionBarActivity
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 
+
     }
+
     public static class PrefsFragment extends PreferenceFragment {
 
         @Override
@@ -76,10 +86,11 @@ public class MainActivity extends ActionBarActivity
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
         }
+
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(3);
+            ((MainActivity) activity).onSectionAttached(4);
 
         }
     }
@@ -93,12 +104,14 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    public Fragment replaceSelectedTab(int pos){
-        if(pos == 1){
+    public Fragment replaceSelectedTab(int pos) {
+        if (pos == 1) {
             return about;
-        }else if (pos == 3) {
+        } else if (pos == 4) {
             return new PrefsFragment();
-        }else{
+        } else if (pos == 3){
+            return new Descriptions();
+        } else {
             return PlaceholderFragment.newInstance(pos);
         }
     }
@@ -113,8 +126,12 @@ public class MainActivity extends ActionBarActivity
                 mTitle = "Sort";
                 break;
             case 3:
+                mTitle = "Descriptions";
+                break;
+            case 4:
                 mTitle = "Settings";
                 break;
+
         }
     }
 
@@ -182,14 +199,15 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             Spinner spinner = (Spinner) rootView.findViewById(R.id.sortChoice);
-                   // Create an ArrayAdapter using the string array and a default spinner layout
+            // Create an ArrayAdapter using the string array and a default spinner layout
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
                     R.array.sort_choice, android.R.layout.simple_spinner_item);
-                        // Specify the layout to use when the list of choices appears
+            // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        // Apply the adapter to the spinner
+            // Apply the adapter to the spinner
             spinner.setAdapter(adapter);
             spinner.setOnItemSelectedListener(new SortSpinner());
+
             return rootView;
         }
 
@@ -200,16 +218,16 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
     public void enter(View view) {
         int[] toSort;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        System.out.println("!!!!!!!!! " + prefs.getBoolean("random_numbers", false));
-        if (prefs.getBoolean("random_numbers", false)){
+        if (prefs.getBoolean("random_numbers", false)) {
             toSort = Sorting.randList(10);
             toSort = sort(toSort, method);
             TextView resultBox = (TextView) findViewById(R.id.result_text);
             resultBox.setText(Sorting.toString(toSort));
-        }else {
+        } else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Enter randomly assorted numbers");
             alertDialog.setMessage("Enter any amount of randomly assorted numbers (the lesser the faster) ranging between and including 0 and 99, with each number separated by commas.");
@@ -219,12 +237,14 @@ public class MainActivity extends ActionBarActivity
             alertDialog.setView(input);
             alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    System.out.println(input.getText().toString());
+                    //if(input != "") {
                     int[] toSort = parseArray(input.getText().toString());
                     toSort = sort(toSort, method);
                     TextView resultBox = (TextView) findViewById(R.id.result_text);
                     resultBox.setText(Sorting.toString(toSort));
                     dialog.dismiss();
+                    //}
+
                 }
             });
             alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -251,9 +271,9 @@ public class MainActivity extends ActionBarActivity
         return arr;
     }
 
-    public int[] sort(int[] theSort, int method){
+    public int[] sort(int[] theSort, int method) {
         int[] returnThis;
-        switch (method){
+        switch (method) {
             case 0:
                 returnThis = Sorting.bubbleSort(theSort);
                 break;
@@ -271,7 +291,9 @@ public class MainActivity extends ActionBarActivity
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
             method = pos;
         }
-        public void onNothingSelected(AdapterView<?> parent) {}
+
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
     }
 }
 
