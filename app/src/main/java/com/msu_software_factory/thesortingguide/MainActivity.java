@@ -213,18 +213,17 @@ public class MainActivity extends ActionBarActivity
             this.toSort = Sorting.randList(10);
             TextView resultBox = (TextView) findViewById(R.id.result_text);
             toSort = sort(toSort, method);
+
             this.resultbox = resultBox;
             resultBox.setText(Sorting.toString(toSort));
             SortView.setToSort(Sorting.sortSteps.steps);
+            SortView.setActivity(this);
 
             LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View sort_view = vi.inflate(R.layout.sort_view, null);
             ViewGroup insertPoint = (ViewGroup)findViewById(R.id.sort_space);
             insertPoint.addView(sort_view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-
-
-            AnimateControl(sort_view);
 
         }else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -306,28 +305,29 @@ public class MainActivity extends ActionBarActivity
         return returnThis;
     }
 
-    public void AnimateControl(View sort_view) {
+    public void AnimateControl(final View sort_view) {
 
         //Runnable mRunnable = () -> AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
 
-        //Runnable mRunnable = new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
-        //    }
-        //};
+        Runnable mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+            }
+        };
 
-        //runOnUiThread(mRunnable);
+        runOnUiThread(mRunnable);
 
-        AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+        //AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
     }
 
     public void AnimateMove(View sort_view, Rect[] rex, int start, int end){
 
         // move square upwards
-        for (int i = 0; i < SortView.rHeight + 20; i++){
+        for (int i = 0; i < (SortView.rHeight + 20); i++){
             rex[start].offset(0, -1);
             sort_view.postInvalidate();
+
         }
 
         // move square horizontally above its correct spot

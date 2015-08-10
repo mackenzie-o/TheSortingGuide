@@ -1,5 +1,6 @@
 package com.msu_software_factory.thesortingguide;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -30,9 +31,11 @@ public class SortView extends ImageView {
     static Rect[] sortedUnits;
     static LinkedList<Step> toSort;
     static int[] unsorted;
+    static MainActivity mainActivity;
     Paint paint = new Paint();
     Boolean firstDraw = true;
     int textSize = 10;
+    static Boolean setupComplete = false;
 
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
@@ -43,8 +46,9 @@ public class SortView extends ImageView {
         }catch (Exception e){
             System.out.println(e);
         }
-
-        viewSetUp();
+        System.out.println("made it here");
+        invalidate();
+        System.out.println("then here");
     }
 
 
@@ -53,12 +57,17 @@ public class SortView extends ImageView {
         unsorted = list.getFirst().arrayBefore;
     }
 
+    public static void setActivity( MainActivity act){
+        mainActivity = act;
+    }
+
     @Override
     protected void onDraw(Canvas c){
-        //if (firstDraw){
-        //    viewSetUp();
-         //   firstDraw = false;
-        //}
+        if (firstDraw){
+            System.out.println("Do we ever get here");
+            viewSetUp();
+            firstDraw = false;
+        }
         for (int i = 0; i < sortedUnits.length; i++){
             c.drawRect(sortedUnits[i], paint);
             float txPos = sortedUnits[i].exactCenterX();
@@ -82,6 +91,12 @@ public class SortView extends ImageView {
         paint.setColor(Color.BLUE);
         textSize = setSuitableTextSize();
         paint.setTextAlign(Paint.Align.CENTER);
+
+        setupComplete = true;
+        System.out.println("does this get called?");
+        this.buildLayer();
+        mainActivity.AnimateControl(this);
+
     }
     private int setSuitableTextSize() {
         int textSize = getEstimateTextSize();
@@ -124,38 +139,4 @@ public class SortView extends ImageView {
         canvas.drawText(text, cX - (textWidth / 2), cY + (textSize / 2), tempTextPaint);
     }
 
-    private void animationTest(Rect[] rex, int start, int end) {
-
-        // move square upwards
-        for (int i = 0; i < rHeight + 20; i++){
-            rex[start].offset(0, -1);
-            postInvalidate();
-        }
-
-        // move square horizontally above its correct spot
-        for (int i = rex[start].left; i < rex[end].left; i++){
-            rex[start].offset(1, 0);
-            postInvalidate();
-        }
-
-        // shift all other units over
-        for (int i = 0; i < rWidth + 20; i++){
-            for (int j = start + 1; j <= end; j++){
-                   rex[j].offset(-1, 0);
-            }
-            postInvalidate();
-        }
-
-        // move square back into line
-        for (int i = 0; i < rHeight + 20; i++){
-            rex[start].offset(0, 1);
-            postInvalidate();
-        }
-
-        //swap start and end rects in array
-        Rect temp = rex[start];
-        rex[start] = rex[end];
-        rex[end] = temp;
-
-    }
 }
