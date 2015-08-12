@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.media.Image;
+import android.graphics.Rect;
+import android.os.SystemClock;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -38,8 +40,7 @@ import android.widget.EditText;
 import android.text.InputType;
 import android.widget.AdapterView.OnItemSelectedListener;
 import java.util.ArrayList;
-import android.widget.TabHost;
-import android.widget.TabHost.TabSpec;
+import android.os.Handler;
 
 
 public class MainActivity extends ActionBarActivity
@@ -55,6 +56,9 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
     private static int method;
+    public static int[] toSort;
+
+    public TextView resultbox;
 
     private Fragment about = new AboutFragment();
 
@@ -220,14 +224,26 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void enter(View view) {
-        int[] toSort;
+//        retrieves the shared preferences for the randomizer, which is true or false
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        if (prefs.getBoolean("random_numbers", false)) {
-            toSort = Sorting.randList(10);
-            toSort = sort(toSort, method);
+
+        if (prefs.getBoolean("random_numbers", false)){
+            this.toSort = Sorting.randList(10);
             TextView resultBox = (TextView) findViewById(R.id.result_text);
+            toSort = sort(toSort, method);
+
+            this.resultbox = resultBox;
             resultBox.setText(Sorting.toString(toSort));
-        } else {
+            SortView.setToSort(Sorting.sortSteps.steps);
+            SortView.setActivity(this);
+
+            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View sort_view = vi.inflate(R.layout.sort_view, null);
+            ViewGroup insertPoint = (ViewGroup)findViewById(R.id.sort_space);
+            insertPoint.addView(sort_view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+
+        }else {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Enter randomly assorted numbers");
             alertDialog.setMessage("Enter any amount of randomly assorted numbers (the lesser the faster) ranging between and including 0 and 99, with each number separated by commas.");
@@ -237,15 +253,36 @@ public class MainActivity extends ActionBarActivity
             alertDialog.setView(input);
             alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    //if(input != "") {
-                    int[] toSort = parseArray(input.getText().toString());
-                    toSort = sort(toSort, method);
-                    TextView resultBox = (TextView) findViewById(R.id.result_text);
-                    resultBox.setText(Sorting.toString(toSort));
-                    dialog.dismiss();
-                    //}
+                    System.out.println(input.getText().toString());
+                    String temp = input.getText().toString();
+                    int[] toSort;
+                    if (input != null) {
+                        toSort = parseArray(input.getText().toString());
+                    } else {
+                        toSort = new int[0];
+                    }
+                    if ( toSort != null && toSort.length == 6) {
+                        toSort = sort(toSort, method);
+                        TextView resultBox = (TextView) findViewById(R.id.result_text);
+                        resultBox.setText(Sorting.toString(toSort));
+                        dialog.dismiss();
 
+//                    Passes the sorting list to a static variable
+                        SortView.setToSort(Sorting.sortSteps.steps);
+
+                        LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View v = vi.inflate(R.layout.sort_view, null);
+                        ViewGroup insertPoint = (ViewGroup) findViewById(R.id.sort_space);
+                        insertPoint.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    } else {
+                        Context context = getApplicationContext();
+                        CharSequence text = "The number of the inputs shall be 6, and only 6. 5 will not cut it, unless you then proceed to input another number, making 6";
+                        int duration = Toast.LENGTH_LONG;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
                 }
+
             });
             alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -253,7 +290,6 @@ public class MainActivity extends ActionBarActivity
                 }
             });
             alertDialog.show();
-
         }
     }
 
@@ -285,6 +321,58 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
         return returnThis;
+    }
+
+    public void AnimateControl(final View sort_view) {
+
+        //Runnable mRunnable = () -> AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+
+        Runnable mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+            }
+        };
+
+        runOnUiThread(mRunnable);
+
+        //AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+    }
+
+    public void AnimateMove(View sort_view, Rect[] rex, int start, int end){
+
+        // move square upwards
+        for (int i = 0; i < (SortView.rHeight + 20); i++){
+            rex[start].offset(0, -1);
+            sort_view.postInvalidate();
+
+        }
+
+        // move square horizontally above its correct spot
+        for (int i = rex[start].left; i < rex[end].left; i++){
+            rex[start].offset(1, 0);
+            sort_view.postInvalidate();
+        }
+
+        // shift all other units over
+        for (int i = 0; i < SortView.rWidth + 20; i++){
+            for (int j = start + 1; j <= end; j++){
+                rex[j].offset(-1, 0);
+            }
+            sort_view.postInvalidate();
+        }
+
+        // move square back into line
+        for (int i = 0; i < SortView.rHeight + 20; i++){
+            rex[start].offset(0, 1);
+            sort_view.postInvalidate();
+        }
+
+        //swap start and end rects in array
+        Rect temp = rex[start];
+        rex[start] = rex[end];
+        rex[end] = temp;
+
     }
 
     public static class SortSpinner extends Activity implements AdapterView.OnItemSelectedListener {

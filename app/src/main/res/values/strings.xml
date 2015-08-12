@@ -38,7 +38,7 @@
         until it finds a location where the selected number is larger than the number before and smaller the number after.
         The process then moves the numbers to the right of the position over one, so the selected number can \'insert\' itself into the sorted section.
     </string>
-    <string name="bubbleCode">func bubblesort( var a as array )<br/>
+    <string name="bubbleCode">func bubblesort( var a as array )
     for i from 1 to N
         for j from 0 to N - 1
            if a[j] > a[j + 1]
