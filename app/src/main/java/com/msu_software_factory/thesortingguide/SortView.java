@@ -40,15 +40,12 @@ public class SortView extends ImageView {
     public SortView(Context context, AttributeSet attr){
         super(context, attr);
         mContext = context;
-        System.out.println("Sort View constructor called");
         try{
             sortedUnits = new Rect[unsorted.length];
         }catch (Exception e){
             System.out.println(e);
         }
-        System.out.println("made it here");
         invalidate();
-        System.out.println("then here");
     }
 
 
@@ -64,7 +61,6 @@ public class SortView extends ImageView {
     @Override
     protected void onDraw(Canvas c){
         if (firstDraw){
-            System.out.println("Do we ever get here");
             viewSetUp();
             firstDraw = false;
         }
@@ -93,9 +89,8 @@ public class SortView extends ImageView {
         paint.setTextAlign(Paint.Align.CENTER);
 
         setupComplete = true;
-        System.out.println("does this get called?");
         this.buildLayer();
-        mainActivity.AnimateControl(this);
+        mainActivity.AnimateControl(this, toSort);
 
     }
     private int setSuitableTextSize() {

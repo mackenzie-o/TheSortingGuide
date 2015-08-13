@@ -40,6 +40,8 @@ import android.widget.EditText;
 import android.text.InputType;
 import android.widget.AdapterView.OnItemSelectedListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import android.os.Handler;
 
 
@@ -57,7 +59,8 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
     private static int method;
     public static int[] toSort;
-
+    public int offsetCount = 0;
+    public Handler handler;
     public TextView resultbox;
 
     private Fragment about = new AboutFragment();
@@ -67,6 +70,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handler = new Handler();
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -323,49 +327,77 @@ public class MainActivity extends ActionBarActivity
         return returnThis;
     }
 
-    public void AnimateControl(final View sort_view) {
+    public void AnimateControl(final View sort_view, LinkedList toSort) {
 
-        //Runnable mRunnable = () -> AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+        // reset timing counter
+        offsetCount = 0;
+        for (int i = 0; i < toSort.size(); i++){
+            Step step = (Step) toSort.get(i);
+            if (step.type == "swap"){
+                AnimateMove(sort_view, SortView.sortedUnits, step.start, step.end);
+            }
+        }
+    }
 
-        Runnable mRunnable = new Runnable() {
+    public void AnimateMove(final View sort_view, final Rect[] rex, final int start, final int end){
+
+        System.out.println("here");
+        Runnable mR1 = new Runnable() {
             @Override
             public void run() {
-                AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
+                rex[start].offset(0, -1);
+                sort_view.invalidate();
             }
         };
 
-        runOnUiThread(mRunnable);
+        Runnable mR2 = new Runnable() {
+            @Override
+            public void run(){
+                rex[start].offset(-1,0);
+                sort_view.invalidate();
+            }
+        };
 
-        //AnimateMove(sort_view, SortView.sortedUnits, 2, 3);
-    }
+        Runnable mR3 = new Runnable() {
+            @Override
+            public void run(){
+                for (int j = start + 1; j <= end; j++){
+                    rex[j].offset(1, 0);
+                }
+                sort_view.postInvalidate();
+            }
+        };
 
-    public void AnimateMove(View sort_view, Rect[] rex, int start, int end){
+        Runnable mR4 = new Runnable() {
+            @Override
+            public void run(){
+                rex[start].offset(0,1);
+                sort_view.invalidate();
+            }
+        };
 
         // move square upwards
-        for (int i = 0; i < (SortView.rHeight + 20); i++){
-            rex[start].offset(0, -1);
-            sort_view.postInvalidate();
-
+        for (int i = 0; i < (SortView.rHeight + 20); i++) {
+            sort_view.postDelayed(mR1, 10 * (offsetCount + 1));
+            offsetCount++;
         }
 
         // move square horizontally above its correct spot
         for (int i = rex[start].left; i < rex[end].left; i++){
-            rex[start].offset(1, 0);
-            sort_view.postInvalidate();
+            sort_view.postDelayed(mR2, 10 * (offsetCount + 1));
+            offsetCount++;
         }
 
         // shift all other units over
         for (int i = 0; i < SortView.rWidth + 20; i++){
-            for (int j = start + 1; j <= end; j++){
-                rex[j].offset(-1, 0);
-            }
-            sort_view.postInvalidate();
+            sort_view.postDelayed(mR3, 10 * (offsetCount + 1));
+            offsetCount++;
         }
 
         // move square back into line
         for (int i = 0; i < SortView.rHeight + 20; i++){
-            rex[start].offset(0, 1);
-            sort_view.postInvalidate();
+            sort_view.postDelayed(mR4, 10 * (offsetCount + 1));
+            offsetCount++;
         }
 
         //swap start and end rects in array
