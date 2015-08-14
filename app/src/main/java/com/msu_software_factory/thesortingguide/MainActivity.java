@@ -362,7 +362,11 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void run(){
                 for (int j = start + 1; j <= end; j++){
-                    rex[j].offset(1, 0);
+                    if (start < end)
+                        rex[j].offset(1, 0);
+                    else {
+                        rex[j].offset(0, 1);
+                    }
                 }
                 sort_view.postInvalidate();
             }
