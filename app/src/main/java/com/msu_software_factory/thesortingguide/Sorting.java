@@ -11,7 +11,7 @@ public class Sorting {
     public static int[] randList(int size){
         int[] newlist = new int[sortSize];
         for (int i = 0; i < newlist.length; i++) {
-            int randomInt = randomgenerator.nextInt(sortSize);
+            int randomInt = randomgenerator.nextInt(99);
             newlist[i] = randomInt;
         }
         return newlist;
