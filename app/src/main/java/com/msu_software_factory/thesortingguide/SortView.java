@@ -69,7 +69,7 @@ public class SortView extends ImageView {
             float txPos = sortedUnits[i].exactCenterX();
             float tyPos = sortedUnits[i].exactCenterY();
 
-            drawDigit(c, textSize, txPos, tyPos, Color.YELLOW, Integer.toString(unsorted[i]));
+            drawDigit(c, textSize, txPos, tyPos, Color.parseColor("#ffb61c"), Integer.toString(unsorted[i]));
         }
 
     }
