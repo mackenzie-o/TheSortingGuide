@@ -89,8 +89,8 @@ public class SortView extends ImageView {
         paint.setTextAlign(Paint.Align.CENTER);
 
         setupComplete = true;
-        this.buildLayer();
-        mainActivity.AnimateControl(this, toSort);
+        //this.buildLayer();
+        mainActivity.AnimateControl(this, toSort, unsorted);
 
     }
     private int setSuitableTextSize() {
