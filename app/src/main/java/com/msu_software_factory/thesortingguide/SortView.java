@@ -84,7 +84,7 @@ public class SortView extends ImageView {
             sortedUnits[i] = new Rect(xPos,yPos,xPos + rWidth - 1,yPos + rHeight - 1);
             xPos += rWidth + 20;
         }
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.BLACK);
         textSize = setSuitableTextSize();
         paint.setTextAlign(Paint.Align.CENTER);
 

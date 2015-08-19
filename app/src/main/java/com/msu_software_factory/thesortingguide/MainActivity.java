@@ -371,13 +371,10 @@ public class MainActivity extends ActionBarActivity
             @Override
             public void run(){
                 if (start < end) {
-                    for (int j = start + 1; j <= end; j++) {
-                        rex[j].offset(-1, 0);
-                    }
+
+                        rex[end].offset(-1, 0);
                 } else {
-                    for (int j = start - 1; j >= end; j--){
-                        rex[j].offset(1, 0);
-                    }
+                        rex[end].offset(1, 0);
                 }
                 sort_view.postInvalidate();
             }
@@ -396,25 +393,33 @@ public class MainActivity extends ActionBarActivity
             public void run(){
                 //swap start and end rects in array
 
-                if (start < end) {
-                    Rect temp = rex[start];
-                    int temp2 = unsorted[start];
-                    for (int i = start + 1; i <= end; i++) {
-                        rex[i - 1] = rex[i];
-                        unsorted[i - 1] = unsorted[i];
-                    }
-                    rex[end] = temp;
-                    unsorted[end] = temp2;
-                } else {
-                    Rect temp = rex[end];
-                    int temp2 = unsorted[end];
-                    for (int i = end + 1; i <= start; i++) {
-                        rex[i - 1] = rex[i];
-                        unsorted[i - 1] = unsorted[i];
-                    }
-                    rex[start] = temp;
-                    unsorted[start] = temp2;
-                }
+//                if (start < end) {
+//                    Rect temp = rex[start];
+//                    int temp2 = unsorted[start];
+//                    for (int i = start + 1; i <= end; i++) {
+//                        rex[i - 1] = rex[i];
+//                        unsorted[i - 1] = unsorted[i];
+//                    }
+//                    rex[end] = temp;
+//                    unsorted[end] = temp2;
+//                } else {
+//                    Rect temp = rex[end];
+//                    int temp2 = unsorted[end];
+//                    for (int i = end + 1; i <= start; i++) {
+//                        rex[i - 1] = rex[i];
+//                        unsorted[i - 1] = unsorted[i];
+//                    }
+//                    rex[start] = temp;
+//                    unsorted[start] = temp2;
+//                }
+                Rect temp = rex[start];
+                int temp2 = unsorted[start];
+
+                rex[start] = rex[end];
+                unsorted[start] = unsorted[end];
+
+                rex[end] = temp;
+                unsorted[end] = temp2;
             }
         };
 
@@ -438,7 +443,8 @@ public class MainActivity extends ActionBarActivity
         }
 
         // shift all other units over
-        for (int i = 0; i < SortView.rWidth + 20; i++){
+        int shiftlen = Math.abs(start - end);
+        for (int i = 0; i < (SortView.rWidth + 20) * shiftlen; i++){
             sort_view.postDelayed(mR3, delayTime * (offsetCount + 1));
             offsetCount++;
         }
