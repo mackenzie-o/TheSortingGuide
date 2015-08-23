@@ -391,27 +391,6 @@ public class MainActivity extends ActionBarActivity
         Runnable mR5 = new Runnable() {
             @Override
             public void run(){
-                //swap start and end rects in array
-
-//                if (start < end) {
-//                    Rect temp = rex[start];
-//                    int temp2 = unsorted[start];
-//                    for (int i = start + 1; i <= end; i++) {
-//                        rex[i - 1] = rex[i];
-//                        unsorted[i - 1] = unsorted[i];
-//                    }
-//                    rex[end] = temp;
-//                    unsorted[end] = temp2;
-//                } else {
-//                    Rect temp = rex[end];
-//                    int temp2 = unsorted[end];
-//                    for (int i = end + 1; i <= start; i++) {
-//                        rex[i - 1] = rex[i];
-//                        unsorted[i - 1] = unsorted[i];
-//                    }
-//                    rex[start] = temp;
-//                    unsorted[start] = temp2;
-//                }
                 Rect temp = rex[start];
                 int temp2 = unsorted[start];
 
